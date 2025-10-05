@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件中转站</title>
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #00bcd4;
+            --accent-color: #ff9800;
+            --background: #f0f4f8;
+            --card-bg: #fff;
+            --shadow: 0 6px 24px rgba(30, 34, 90, 0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f0f4f8 100%);
+            min-height: 100vh;
+            padding: 2.5rem 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 2.5rem;
+            font-size: 2.8rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+
+        .upload-section {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 2.2rem 2rem 1.5rem 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2.5rem;
+            border-left: 6px solid var(--secondary-color);
+            transition: box-shadow 0.2s;
+        }
+
+        .upload-section:hover {
+            box-shadow: 0 12px 32px rgba(30, 34, 90, 0.13), 0 2px 8px rgba(0,0,0,0.07);
+        }
+
+        .form-group {
+            margin-bottom: 1.7rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.7rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.08rem;
+        }
+
+        input[type="file"] {
+            border: 2px dashed var(--secondary-color);
+            background: #f7fafc;
+            padding: 1.2rem;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        input[type="file"]:hover {
+            border-color: var(--accent-color);
+        }
+
+        .storage-type {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .storage-type > div {
+            display: flex;
+            align-items: center;
+        }
+
+        .storage-type input[type="radio"] {
+            display: none;
+        }
+
+        .storage-type label {
+            background: #f0f0f0;
+            padding: 0.7rem 1.6rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            border: 2px solid transparent;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+
+        .storage-type input:checked + label {
+            background: var(--secondary-color);
+            color: #fff;
+            border: 2px solid var(--secondary-color);
+            box-shadow: 0 2px 8px rgba(0,188,212,0.08);
+        }
+
+        button {
+            background: linear-gradient(90deg, var(--secondary-color) 60%, var(--accent-color) 100%);
+            color: white;
+            border: none;
+            padding: 0.9rem 2.2rem;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,188,212,0.13);
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-top: 0.5rem;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 18px rgba(0,188,212,0.18);
+        }
+
+        .file-list {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 2rem 2rem 1.2rem 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.1rem 0.5rem;
+            border-bottom: 1px solid #e3e3e3;
+            transition: background 0.15s;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-item:hover {
+            background: #f7fafc;
+        }
+
+        .file-info {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        .file-type {
+            background: var(--accent-color);
+            color: #fff;
+            padding: 0.35rem 1.1rem;
+            border-radius: 6px;
+            font-size: 0.98rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 700px) {
+            .container {
+                padding: 0 0.5rem;
+            }
+            .upload-section, .file-list {
+                padding: 1.2rem 0.7rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📁文件中转站</h1>
+
+        <div class="upload-section">
+            <div class="form-group">
+                <label>选择文件</label>
+                <input type="file" id="fileInput">
+            </div>
+
+            <div class="form-group">
+                <label>存储类型</label>
+                <div class="storage-type">
+                    <div>
+                        <input type="radio" name="storageType" id="deepStorage" value="deep" checked>
+                        <label for="deepStorage">持久存储</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="storageType" id="lowStorage" value="low">
+                        <label for="lowStorage">普通存储</label>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="uploadFile()">
+                ⬆️ 开始上传
+            </button>
+        </div>
+
+        <!-- 文件列表动态插入点 -->
+        {{FILE_LIST}}
+    </div>
+
+    <script>
+        // 动态配置注入
+        const config = {
+            backendUrl: '{{BACKEND_URL}}'
+        };
+
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const storageType = document.querySelector('input[name="storageType"]:checked').value;
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('请先选择文件');
+                return;
+            }
+
+            // // Base64 编码
+            const encodedFilename = btoa(unescape(encodeURIComponent(file.name)));
+            console.log("Base64 编码结果:", encodedFilename);
+
+            try {
+                const response = await fetch(`${config.backendUrl}/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'StorageType': storageType,
+                        'FileName': encodedFilename // 使用 Base64 编码
+                    },
+                    body: file
+                });
+
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert(`上传失败: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('上传错误:', error);
+                alert('网络连接失败');
+            }
+        }
+
+        function downloadFile(fileId) {
+            window.location = `${config.backendUrl}/download?id=${fileId}`;
+        }
+    </script>
+</body>
+</html>
